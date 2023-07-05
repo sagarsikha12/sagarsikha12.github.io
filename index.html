@@ -1,108 +1,270 @@
 <!DOCTYPE html>
+<html>
+<head>
+  <title>Sagar Basnet - Resume</title>
+ <style>
+body {
+    background-color: #f4f4f4;
+}
+
+.container {
+  font-family: Arial, sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.section {
+  margin-bottom: 40px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+h1, h2, h3 {
+  color: #333;
+}
+
+h1 {
+  font-size: 36px;
+}
+
+h2 {
+  font-size: 24px;
+  margin-top: 40px;
+}
+
+h3 {
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+p, li {
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+a {
+  color: #0077cc;
+}
+
+ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+li:before {
+    content: "•";
+    color: #0077cc;
+    font-weight: bold;
+    display: inline-block; 
+    width: 1em;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {opacity:0;}
+    to {opacity:1;}
+}
+
+#professional-summary * {
+    animation-name: fadeIn;
+    animation-duration: 2s;
+}
+
+#key-skills * {
+    animation-name: fadeIn;
+    animation-duration: 2s;
+}
+
+#education * {
+    animation-name: fadeIn;
+    animation-duration: 2s;
+}
+
+#projects * {
+    animation-name: fadeIn;
+    animation-duration: 2s;
+}
+
+/* Navbar */
+nav ul {
+   display:flex; 
+   justify-content:center; 
+}
+nav li{
+   margin-right :10px; 
+   background-color:#0077cc; 
+   padding :10px; 
+   border-radius :5px; 
+}
+nav a{
+   text-decoration:none; 
+   color:white; 
+}
+nav a:hover{
+   transform : scale(1.2); 
+   transition : all .3s ease-in-out; 
+}
+
+/* Language text */
+#languages {
+   color:#0077cc; 
+}
+.typed-cursor{
+   opacity :1; 
+   animation : typedjsBlink .7s infinite; 
+}
+@keyframes typedjsBlink{
+   to{opacity :0;}
+}
 
 
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1181781691758281"
-     crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
-        <meta charset="UTF-8">
-            <link rel="stylesheet" href="style.css">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <title>
-          Freefire Team Registration 
+ </style>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const sections = document.querySelectorAll('.section');
+      const navLinks = document.querySelectorAll('nav ul li a');
 
+      window.addEventListener('scroll', () => {
+        const currentSectionIndex = [...sections].findIndex((section) => {
+          const rect = section.getBoundingClientRect();
+          return rect.top >= 0 && rect.bottom <= window.innerHeight;
+        });
 
-      </title>
-  <link rel="shortcut icon" href="./img/favicon.png"" type="image">
-    </head>
+        navLinks.forEach((link, index) => {
+          if (index === currentSectionIndex) {
+            link.classList.add('active');
+          } else {
+            link.classList.remove('active');
+          }
+        });
+      });
+    });
+  </script>
+</head>
+<body>
+  <nav>
+    <ul>
+      <li><a href="#professional-summary">Professional Profile</a></li>
+      <li><a href="#key-skills">Key Skills Summary</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#projects">Academic Projects</a></li>
+      
+    </ul>
+  </nav>
 
-    <body>
+  <div class="container">
+    <div class="section professional-summary" id="professional-summary">
+        <center>
+          <h1>Sagar Basnet</h1>
+          <p>I am familiar with <span id="languages"></span><span class="typed-cursor">|</span>.</p>
+          <p>Website: <a href="https://sagarbasnet12.com.np">Sagarbasnet12.com.np</a></p>
+          <p>Email: sagarsikha12@gmail.com</p>
+          <p>Mobile: 0451208977</p>
+          <p>LinkedIn: <a href="https://www.linkedin.com/in/sagar-basnet-0b17871a8">Sagar Basnet</a></p>
+        </center>
+        <script>
+            const languages = ['Java', 'JavaScript', 'HTML', 'CSS', 'PHP', 'C++', 'SQL', 'Python', 'C#', 'XML'];
+            const languageElement = document.querySelector('#languages');
+            let index = 0;
+            
+            setInterval(() => {
+              languageElement.textContent = languages[index];
+              index = (index + 1) % languages.length;
+            }, 1000);
+          </script>
+      <h2>Professional Profile</h2>
+      <p>
+        I am a highly dedicated and quick learner seeking an opportunity to utilize my technical skills by working on real-time projects in one of the renowned IT companies. I am looking forward to enhancing my expertise in web development.
+      </p>
 
-        <div class="wrapper">
-            <!--Top menu -->
-            <div class="section">
-            <div class="top_navbar">
-                <div class="hamburger">
-                    <a href="#">
-                        <i class="fas fa-bars"onclick="changeStyle()"></i>
+      <h2>Hard Skills</h2>
+      <p>
+        I have developed various projects using Java, Python, C#, and I am familiar with HTML, CSS, and JS. I have also created RESTful APIs using React JS. Moreover, I am a competent backend developer using Django, MySQL, and MongoDB. I have good knowledge of operating systems like Linux, Windows, and Mac.
+      </p>
 
-                    </a>
-                </div>
+      <h2>Soft Skills</h2>
+      <ul>
+        <li>Team Leader</li>
+        <li>Problem Solver</li>
+        <li>Quick Learner</li>
+        <li>Hard Worker</li>
+        <li>Punctual</li>
+      </ul>
+    </div>
 
+    <div class="section key-skills" id="key-skills">
+      <h2>Key Skills Summary</h2>
+      <ul>
+        <li>Programming Languages: Java, JavaScript, HTML, CSS, PHP, C++, SQL, Python, C#, XML</li>
+        <li>Operating Systems: Linux, Mac, Windows</li>
+        <li>Frameworks: Django, React JS</li>
+        <li>Laravel (Beginner)</li>
+      </ul>
+    </div>
 
+    <div class="section education" id="education">
+      <h2>Education</h2>
+      <ul>
+        <li>
+          <h3>2020-2023</h3>
+          <p>Kings Own Institute - Bachelor Level</p>
+          <p>Address: Sydney, Australia</p>
+          <p>Faculty: Information Technology</p>
+          <p>Achievements: 18HD out of 24</p>
+        </li>
+        <li>
+          <h3>2017-2019</h3>
+          <p>Koshi Saint James College - +2 Level</p>
+          <p>Address: Itahari, Nepal</p>
+          <p>Faculty: Science</p>
+          <p>GPA: 3.36</p>
+        </li>
+        <li>
+          <h3>2017</h3>
+          <p>Dayananda Vedic Mission - SEE</p>
+          <p>Address: Itahari, Nepal</p>
+          <p>GPA: 3.65</p>
+        </li>
+      </ul>
+    </div>
 
-          </div>
+    <div class="section projects" id="projects">
+        <h2>Academic Projects</h2>
+        <ul>
+          <li>
+            <h3>Port Douglas Community</h3>
+            <p>Kings Own Institute, Sydney</p>
+            <p>Objective: Developed a mobile application named Port Douglas Community using Flutter.</p>
+            <p>Tools: Flutter flow</p>
+            <p>Duties: Main developer responsible for creating the entire application and providing it for testing.</p>
+            <p>Result: Gained experience in using Flutter and working with clients.</p>
+            <p>GitHub: <a href="https://github.com/sagarsikha12/portdouglas/tree/flutterproject">https://github.com/sagarsikha12/portdouglas</a></p>
+          </li>
+        <li>
+          <h3>Online Library System</h3>
+          <p>Kings Own Institute, Sydney</p>
+          <p>Objective: Created an online library system using ASP.NET MVC framework.</p>
+          <p>Tools: ASP.NET and Visual Studio Code</p>
+          <p>Duties: Backend developer responsible for creating the backend application.</p>
+          <p>Result: Gained experience in using ASP.NET MVC and working as part of a team.</p>
 
-        </div>
-            <div class="sidebar">
-               <!--profile image & text-->
+        </li>
+        <li>
+          <h3>Online Shopping</h3>
+          <p>Kings Own Institute, Sydney</p>
+          <p>Objective: Developed an online shopping website using React JS and Firebase with GitHub.</p>
+          <p>Tools: Visual Studio Code, React JS, GitHub</p>
+          <p>Duties: Individual project where I learned React JS and used GitHub for project management.</p>
+          <p>Result: Gained proficiency in using React JS.</p>
+          <p> Netlify Website Link: <a href="https://647c7ac93d64720008ccd0cf--steady-tarsier-87d1b2.netlify.app" > Shoping Website </a></p>
+        </li>
+      </ul>
+    </div>
 
-                <!--menu item-->
-                <ul>
-                <li>
-                    <a href="#" >
-                        <span class="icon"><i class="fas fa-home"></i></span>
-                        <span class="item">Home</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="icon"><i class="fas fa-book"></i></span>
-                        <span class="item">Register</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="https://www.youtube.com/c/CreativeGaming1/videos">
-                        <span class="icon"><i class="fas fa-cloud"></i></span>
-                        <span class="item">Youtube Channel</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="icon"><i class="fas fa-phone"></i></span>
-                        <span class="item">Contact Me</span>
-                    </a>
-                </li>
-
-            </ul>
-        </div>
-            </div>
-        </div>
-
-
-     <div id="main">
-       <iframe width="560" height="315" src="https://www.youtube.com/embed/8LpTooUo4Ps?&autoplay=1&mute=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-           <h1 class="m-f">Welcome to my Website</h1>
-           <h2>Please Proceed for registration </h2>
-           <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeYjBmHfHbZI99PL3jjLTmgFf23IOum-j6lz66KUjBNq63E8Q/viewform?embedded=true" width="640" height="1314" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
-
-
-           <!-- Add font awesome icons -->
-           <ul class="social-icons">
-
-             <li><a href="https://www.facebook.com/asus.basnet" class="fab fa-facebook"></a></li>
-             <li><a href="https://www.instagram.com/asus.basnet" class="fab fa-instagram"></a></li>
-             <li><a href="https://www.youtube.com/c/CreativeGaming1/videos" class="fab fa-youtube"></a></li>
-             <li><a href="mailto:sagarsikha12@gmail.com" class="fa fa-envelope"></a></li>
-           </ul>
-     </div>
-     <div class="footer">Copyright &copy; 2022 Sagar</div>
-
-
-
-      <script>
-      var hamburger = document.querySelector(".hamburger");
-        hamburger.addEventListener("click", function(){
-            document.querySelector("body").classList.toggle("active");
-
-        })
-
-
-      </script>
-    </body>
-    </html>
+    
+  </div>
+</body>
+</html>
