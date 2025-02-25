@@ -1,270 +1,219 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-  <title>Sagar Basnet - Resume</title>
- <style>
-body {
-    background-color: #f4f4f4;
-}
-
-.container {
-  font-family: Arial, sans-serif;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.section {
-  margin-bottom: 40px;
-  background-color: white;
-  padding: 20px;
-  border-radius: 5px;
-}
-
-h1, h2, h3 {
-  color: #333;
-}
-
-h1 {
-  font-size: 36px;
-}
-
-h2 {
-  font-size: 24px;
-  margin-top: 40px;
-}
-
-h3 {
-    font-size: 20px;
-    margin-top: 20px;
-}
-
-p, li {
-  font-size: 18px;
-  line-height: 1.5;
-}
-
-a {
-  color: #0077cc;
-}
-
-ul {
-    list-style: none;
-    padding-left: 0;
-}
-
-li:before {
-    content: "•";
-    color: #0077cc;
-    font-weight: bold;
-    display: inline-block; 
-    width: 1em;
-}
-
-/* Animations */
-@keyframes fadeIn {
-    from {opacity:0;}
-    to {opacity:1;}
-}
-
-#professional-summary * {
-    animation-name: fadeIn;
-    animation-duration: 2s;
-}
-
-#key-skills * {
-    animation-name: fadeIn;
-    animation-duration: 2s;
-}
-
-#education * {
-    animation-name: fadeIn;
-    animation-duration: 2s;
-}
-
-#projects * {
-    animation-name: fadeIn;
-    animation-duration: 2s;
-}
-
-/* Navbar */
-nav ul {
-   display:flex; 
-   justify-content:center; 
-}
-nav li{
-   margin-right :10px; 
-   background-color:#0077cc; 
-   padding :10px; 
-   border-radius :5px; 
-}
-nav a{
-   text-decoration:none; 
-   color:white; 
-}
-nav a:hover{
-   transform : scale(1.2); 
-   transition : all .3s ease-in-out; 
-}
-
-/* Language text */
-#languages {
-   color:#0077cc; 
-}
-.typed-cursor{
-   opacity :1; 
-   animation : typedjsBlink .7s infinite; 
-}
-@keyframes typedjsBlink{
-   to{opacity :0;}
-}
-
-
-
- </style>
-  <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      const sections = document.querySelectorAll('.section');
-      const navLinks = document.querySelectorAll('nav ul li a');
-
-      window.addEventListener('scroll', () => {
-        const currentSectionIndex = [...sections].findIndex((section) => {
-          const rect = section.getBoundingClientRect();
-          return rect.top >= 0 && rect.bottom <= window.innerHeight;
-        });
-
-        navLinks.forEach((link, index) => {
-          if (index === currentSectionIndex) {
-            link.classList.add('active');
-          } else {
-            link.classList.remove('active');
-          }
-        });
-      });
-    });
-  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ANC Visit Calculator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-  <nav>
-    <ul>
-      <li><a href="#professional-summary">Professional Profile</a></li>
-      <li><a href="#key-skills">Key Skills Summary</a></li>
-      <li><a href="#education">Education</a></li>
-      <li><a href="#projects">Academic Projects</a></li>
-      
-    </ul>
-  </nav>
-
   <div class="container">
-    <div class="section professional-summary" id="professional-summary">
-        <center>
-          <h1>Sagar Basnet</h1>
-          <p>I am familiar with <span id="languages"></span><span class="typed-cursor">|</span>.</p>
-          <p>Website: <a href="https://sagarbasnet12.com.np">Sagarbasnet12.com.np</a></p>
-          <p>Email: sagarsikha12@gmail.com</p>
-          <p>Mobile: 0451208977</p>
-          <p>LinkedIn: <a href="https://www.linkedin.com/in/sagar-basnet-0b17871a8">Sagar Basnet</a></p>
-        </center>
-        <script>
-            const languages = ['Java', 'JavaScript', 'HTML', 'CSS', 'PHP', 'C++', 'SQL', 'Python', 'C#', 'XML'];
-            const languageElement = document.querySelector('#languages');
-            let index = 0;
-            
-            setInterval(() => {
-              languageElement.textContent = languages[index];
-              index = (index + 1) % languages.length;
-            }, 1000);
-          </script>
-      <h2>Professional Profile</h2>
-      <p>
-        I am a highly dedicated and quick learner seeking an opportunity to utilize my technical skills by working on real-time projects in one of the renowned IT companies. I am looking forward to enhancing my expertise in web development.
-      </p>
+    <h1>ANC Nepal</h1>
 
-      <h2>Hard Skills</h2>
-      <p>
-        I have developed various projects using Java, Python, C#, and I am familiar with HTML, CSS, and JS. I have also created RESTful APIs using React JS. Moreover, I am a competent backend developer using Django, MySQL, and MongoDB. I have good knowledge of operating systems like Linux, Windows, and Mac.
-      </p>
-
-      <h2>Soft Skills</h2>
-      <ul>
-        <li>Team Leader</li>
-        <li>Problem Solver</li>
-        <li>Quick Learner</li>
-        <li>Hard Worker</li>
-        <li>Punctual</li>
-      </ul>
+    <div class="tabs">
+      <button class="tab-button active" onclick="openTab('tab-ad')">AD Input</button>
+      <button class="tab-button" onclick="openTab('tab-bs')">BS Input</button>
     </div>
 
-    <div class="section key-skills" id="key-skills">
-      <h2>Key Skills Summary</h2>
-      <ul>
-        <li>Programming Languages: Java, JavaScript, HTML, CSS, PHP, C++, SQL, Python, C#, XML</li>
-        <li>Operating Systems: Linux, Mac, Windows</li>
-        <li>Frameworks: Django, React JS</li>
-        
-      </ul>
+    <div id="tab-ad" class="tab-content active">
+      <h3>Enter LMP in AD</h3>
+      <input type="date" id="lmp-date-ad">
+      <button onclick="convertToBS()">Convert to BS</button>
+      <div id="lmp-bs-result"></div>
     </div>
 
-    <div class="section education" id="education">
-      <h2>Education</h2>
-      <ul>
-        <li>
-          <h3>2020-2023</h3>
-          <p>Kings Own Institute - Bachelor Level</p>
-          <p>Address: Sydney, Australia</p>
-          <p>Faculty: Information Technology</p>
-          <p>Achievements: 18HD out of 24</p>
-        </li>
-        <li>
-          <h3>2017-2019</h3>
-          <p>Koshi Saint James College - +2 Level</p>
-          <p>Address: Itahari, Nepal</p>
-          <p>Faculty: Science</p>
-          <p>GPA: 3.36</p>
-        </li>
-        <li>
-          <h3>2017</h3>
-          <p>Dayananda Vedic Mission - SEE</p>
-          <p>Address: Itahari, Nepal</p>
-          <p>GPA: 3.65</p>
-        </li>
-      </ul>
+    <div id="tab-bs" class="tab-content">
+      <h3>Enter LMP in BS</h3>
+      <input type="number" id="bs-year" placeholder="YYYY">
+      <input type="number" id="bs-month" placeholder="MM">
+      <input type="number" id="bs-day" placeholder="DD">
+      <button onclick="convertToAD()">Convert to AD</button>
+      <div id="lmp-ad-result"></div>
     </div>
 
-    <div class="section projects" id="projects">
-        <h2>Academic Projects</h2>
-        <ul>
-          <li>
-            <h3>Port Douglas Community</h3>
-            <p>Kings Own Institute, Sydney</p>
-            <p>Objective: Developed a mobile application named Port Douglas Community using Flutter.</p>
-            <p>Tools: Flutter flow</p>
-            <p>Duties: Main developer responsible for creating the entire application and providing it for testing.</p>
-            <p>Result: Gained experience in using Flutter and working with clients.</p>
-            <p>GitHub: <a href="https://github.com/sagarsikha12/portdouglas/tree/flutterproject">https://github.com/sagarsikha12/portdouglas</a></p>
-          </li>
-        <li>
-          <h3>Online Library System</h3>
-          <p>Kings Own Institute, Sydney</p>
-          <p>Objective: Created an online library system using ASP.NET MVC framework.</p>
-          <p>Tools: ASP.NET and Visual Studio Code</p>
-          <p>Duties: Backend developer responsible for creating the backend application.</p>
-          <p>Result: Gained experience in using ASP.NET MVC and working as part of a team.</p>
+    <hr>
+    <h3>Calculate ANC Visits</h3>
+    <button onclick="calculateANC()">Calculate ANC Visits</button>
+    <div id="visit-schedule"></div>
+    <div id="gestational-info"></div>
+    <div id="remaining-time"></div>
 
-        </li>
-        <li>
-          <h3>Online Shopping</h3>
-          <p>Kings Own Institute, Sydney</p>
-          <p>Objective: Developed an online shopping website using React JS and Firebase with GitHub.</p>
-          <p>Tools: Visual Studio Code, React JS, GitHub</p>
-          <p>Duties: Individual project where I learned React JS and used GitHub for project management.</p>
-          <p>Result: Gained proficiency in using React JS.</p>
-          <p> Netlify Website Link: <a href="https://647c7ac93d64720008ccd0cf--steady-tarsier-87d1b2.netlify.app" > Shoping Website </a></p>
-        </li>
-      </ul>
-    </div>
+  
+    <h4>Check Custom Gestational Age and Remaining Time</h4>
+    <input type="date" id="custom-date" onchange="calculateCustomGestationalAge()">
+    <button onclick="setToToday()">Today</button>
 
-    
+    <div id="custom-gestational-info"></div>
+    <div id="custom-remaining-time"></div>
+
   </div>
+
+  <footer>
+    <p>Created ❤️ by <strong>Bnd Yadav</strong> Health Assistant</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/nepali-date-converter/dist/nepali-date-converter.umd.js"></script>
+  <script>
+    let todayDate = new Date(); // Default to today's date
+
+    // Function to switch between tabs
+    function openTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tab-button').forEach(button => button.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      document.querySelector(`button[onclick="openTab('${tabId}')"]`).classList.add('active');
+    }
+
+    // Function to convert AD to BS
+    function convertToBS() {
+      const adDateInput = document.getElementById('lmp-date-ad').value;
+      if (!adDateInput) {
+        alert('Please enter a valid AD date.');
+        return;
+      }
+      const adDate = new Date(adDateInput);
+      const bsDate = new NepaliDate(adDate).format('YYYY-MM-DD');
+      document.getElementById('lmp-bs-result').innerText = `Nepali LMP (BS): ${bsDate}`;
+    }
+
+    // Function to convert BS to AD
+    function convertToAD() {
+      const bsYear = document.getElementById('bs-year').value;
+      const bsMonth = document.getElementById('bs-month').value;
+      const bsDay = document.getElementById('bs-day').value;
+      if (!bsYear || !bsMonth || !bsDay) {
+        alert('Please enter a valid BS date.');
+        return;
+      }
+      const bsDate = new NepaliDate(Number(bsYear), Number(bsMonth) - 1, Number(bsDay));
+      const adDate = bsDate.toJsDate().toISOString().split('T')[0];
+      document.getElementById('lmp-ad-result').innerText = `Gregorian LMP (AD): ${adDate}`;
+    }
+
+    // Function to calculate ANC visits
+    function calculateANC() {
+      const adDateInput = document.getElementById('lmp-date-ad').value;
+      if (!adDateInput) {
+        alert('Please enter a valid LMP date in AD format.');
+        return;
+      }
+      const lmpDate = new Date(adDateInput);
+
+      const weeksCompleted = Math.floor((todayDate - lmpDate) / (7 * 24 * 60 * 60 * 1000));
+      const monthsCompleted = Math.floor(weeksCompleted / 4.33); // Approximate weeks in a month
+      const daysCompleted = Math.floor((todayDate - lmpDate) / (24 * 60 * 60 * 1000));
+
+      const edd = new Date(lmpDate);
+      edd.setDate(lmpDate.getDate() + 280);  // 280 days for pregnancy
+
+      // Calculate Remaining Time
+      const remainingTime = new Date(edd - todayDate);
+      const remainingDays = Math.floor(remainingTime / (24 * 60 * 60 * 1000));
+      const remainingWeeks = Math.floor(remainingDays / 7);
+      const remainingMonths = Math.floor(remainingWeeks / 4.33);
+
+      // ANC Visit Schedule with Optional Visits
+      const visits = [
+        { visit: 'Visit 1', week: 12 },
+        { visit: 'Visit 2', week: 16 },
+        { visit: 'Visit *', week: 20 },
+        { visit: 'Visit 3', week: 24 },
+        { visit: 'Visit 4', week: 28 },
+        { visit: 'Visit 5', week: 32 },
+        { visit: 'Visit 6', week: 34 },
+        { visit: 'Visit 7', week: 36 },
+        { visit: 'Visit *', week: 38 },
+        { visit: 'Visit 8', week: 40 }
+      ];
+
+      let visitRows = '';
+      visits.forEach(v => {
+        const visitDate = new Date(lmpDate);
+        visitDate.setDate(lmpDate.getDate() + v.week * 7);
+        visitRows += `
+          <tr>
+            <td>${v.visit}</td>
+            <td>${v.week} weeks</td>
+            <td>${visitDate.toISOString().split('T')[0]} (AD)</td>
+            <td>${new NepaliDate(visitDate).format('YYYY-MM-DD')} (BS)</td>
+          </tr>
+        `;
+      });
+
+      document.getElementById('visit-schedule').innerHTML = `
+        <p><strong>Weeks Completed:</strong> ${weeksCompleted} weeks</p>
+        <p><strong>Months Completed:</strong> ${monthsCompleted} months</p>
+        <p><strong>Days Completed:</strong> ${daysCompleted} days</p>
+        <p><strong>Estimated Date of Delivery:</strong> <strong>${edd.toISOString().split('T')[0]} (AD)</strong> / <strong>${new NepaliDate(edd).format('YYYY-MM-DD')} (BS)</strong></p>
+        <table>
+          <thead>
+            <tr>
+              <th>Visit</th>
+              <th>Weeks</th>
+              <th>Date (AD)</th>
+              <th>Date (BS)</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${visitRows}
+          </tbody>
+        </table>
+      `;
+
+      document.getElementById('gestational-info').innerHTML = `
+        <h4>Original Gestational Age:</h4>
+        <p>${monthsCompleted} months, ${Math.floor(weeksCompleted % 4.33)} weeks, ${daysCompleted} days</p>
+        <h4>Original Remaining Time:</h4>
+        <p>${remainingMonths} months, ${remainingWeeks % 4} weeks, ${remainingDays % 7} days</p>
+      `;
+    }
+
+    // Function to set the custom date to today's date
+    function setToToday() {
+      todayDate = new Date();
+      document.getElementById('custom-date').value = todayDate.toISOString().split('T')[0];
+      calculateCustomGestationalAge();
+    }
+
+    // Function to calculate Custom Gestational Age and Remaining Time
+    function calculateCustomGestationalAge() {
+      const customDateInput = document.getElementById('custom-date').value;
+      if (customDateInput) {
+        todayDate = new Date(customDateInput);
+      }
+
+      const adDateInput = document.getElementById('lmp-date-ad').value;
+      if (!adDateInput) {
+        alert('Please enter a valid LMP date in AD format.');
+        return;
+      }
+      const lmpDate = new Date(adDateInput);
+
+      const weeksCompleted = Math.floor((todayDate - lmpDate) / (7 * 24 * 60 * 60 * 1000));
+      const monthsCompleted = Math.floor(weeksCompleted / 4.33);
+      const daysCompleted = Math.floor((todayDate - lmpDate) / (24 * 60 * 60 * 1000));
+
+      const edd = new Date(lmpDate);
+      edd.setDate(lmpDate.getDate() + 280);
+
+      const remainingTime = new Date(edd - todayDate);
+      const remainingDays = Math.floor(remainingTime / (24 * 60 * 60 * 1000));
+      const remainingWeeks = Math.floor(remainingDays / 7);
+      const remainingMonths = Math.floor(remainingWeeks / 4.33);
+
+      document.getElementById('custom-gestational-info').innerHTML = `
+        <h4>Custom Gestational Age:</h4>
+        <p>${monthsCompleted} months, ${Math.floor(weeksCompleted % 4.33)} weeks, ${daysCompleted} days</p>
+      `;
+      document.getElementById('custom-remaining-time').innerHTML = `
+        <h4>Custom Remaining Time:</h4>
+        <p>${remainingMonths} months, ${remainingWeeks % 4} weeks, ${remainingDays % 7} days</p>
+      `;
+    }
+  </script>
 </body>
+
 </html>
