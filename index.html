@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ANC Visit Calculator</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
@@ -35,20 +35,14 @@
     </div>
 
     <hr>
-    <h3>Calculate ANC Visits</h3>
     <button onclick="calculateANC()">Calculate ANC Visits</button>
     <div id="visit-schedule"></div>
-    <div id="gestational-info"></div>
     <div id="remaining-time"></div>
 
-  
-    <h4>Check Custom Gestational Age and Remaining Time</h4>
+    <h4>Gestational Age and Remaining Time</h4>
     <input type="date" id="custom-date" onchange="calculateCustomGestationalAge()">
     <button onclick="setToToday()">Today</button>
-
     <div id="custom-gestational-info"></div>
-    <div id="custom-remaining-time"></div>
-
   </div>
 
   <footer>
@@ -57,7 +51,13 @@
 
   <script src="https://cdn.jsdelivr.net/npm/nepali-date-converter/dist/nepali-date-converter.umd.js"></script>
   <script>
-    let todayDate = new Date(); // Default to today's date
+     // Function to set the custom date to today's date
+     function setToToday() {
+      todayDate = new Date();
+      document.getElementById('custom-date').value = todayDate.toISOString().split('T')[0];
+      calculateCustomGestationalAge();
+    }
+   
 
     // Function to switch between tabs
     function openTab(tabId) {
@@ -67,8 +67,8 @@
       document.querySelector(`button[onclick="openTab('${tabId}')"]`).classList.add('active');
     }
 
-    // Function to convert AD to BS
-    function convertToBS() {
+     // Function to convert AD to BS
+     function convertToBS() {
       const adDateInput = document.getElementById('lmp-date-ad').value;
       if (!adDateInput) {
         alert('Please enter a valid AD date.');
@@ -78,7 +78,7 @@
       const bsDate = new NepaliDate(adDate).format('YYYY-MM-DD');
       document.getElementById('lmp-bs-result').innerText = `Nepali LMP (BS): ${bsDate}`;
     }
-
+    
     // Function to convert BS to AD
     function convertToAD() {
       const bsYear = document.getElementById('bs-year').value;
@@ -93,7 +93,6 @@
       document.getElementById('lmp-ad-result').innerText = `Gregorian LMP (AD): ${adDate}`;
     }
 
-    // Function to calculate ANC visits
     function calculateANC() {
       const adDateInput = document.getElementById('lmp-date-ad').value;
       if (!adDateInput) {
@@ -101,59 +100,36 @@
         return;
       }
       const lmpDate = new Date(adDateInput);
-
+      const todayDate = new Date();
       const weeksCompleted = Math.floor((todayDate - lmpDate) / (7 * 24 * 60 * 60 * 1000));
-      const monthsCompleted = Math.floor(weeksCompleted / 4.33); // Approximate weeks in a month
-      const daysCompleted = Math.floor((todayDate - lmpDate) / (24 * 60 * 60 * 1000));
-
+      const daysCompleted = Math.floor((todayDate - lmpDate) / (24 * 60 * 60 * 1000)) % 7;
       const edd = new Date(lmpDate);
-      edd.setDate(lmpDate.getDate() + 280);  // 280 days for pregnancy
-
-      // Calculate Remaining Time
-      const remainingTime = new Date(edd - todayDate);
-      const remainingDays = Math.floor(remainingTime / (24 * 60 * 60 * 1000));
-      const remainingWeeks = Math.floor(remainingDays / 7);
-      const remainingMonths = Math.floor(remainingWeeks / 4.33);
-
-      // ANC Visit Schedule with Optional Visits
-      const visits = [
-        { visit: 'Visit 1', week: 12 },
-        { visit: 'Visit 2', week: 16 },
-        { visit: 'Visit *', week: 20 },
-        { visit: 'Visit 3', week: 24 },
-        { visit: 'Visit 4', week: 28 },
-        { visit: 'Visit 5', week: 32 },
-        { visit: 'Visit 6', week: 34 },
-        { visit: 'Visit 7', week: 36 },
-        { visit: 'Visit *', week: 38 },
-        { visit: 'Visit 8', week: 40 }
-      ];
-
+      edd.setDate(lmpDate.getDate() + 280);
+      
+      const visits = [12, 16, 20, 24, 28, 32, 34, 36, 38, 40];
       let visitRows = '';
-      visits.forEach(v => {
+      visits.forEach((week, index) => {
         const visitDate = new Date(lmpDate);
-        visitDate.setDate(lmpDate.getDate() + v.week * 7);
+        visitDate.setDate(lmpDate.getDate() + week * 7);
         visitRows += `
           <tr>
-            <td>${v.visit}</td>
-            <td>${v.week} weeks</td>
-            <td>${visitDate.toISOString().split('T')[0]} (AD)</td>
-            <td>${new NepaliDate(visitDate).format('YYYY-MM-DD')} (BS)</td>
+            <td>${index + 1}</td>
+            <td>${week}</td>
+            <td>${visitDate.toISOString().split('T')[0]}</td>
+            <td>${new NepaliDate(visitDate).format('YYYY-MM-DD')}</td>
           </tr>
         `;
       });
-
+      
       document.getElementById('visit-schedule').innerHTML = `
-        <p><strong>Weeks Completed:</strong> ${weeksCompleted} weeks</p>
-        <p><strong>Months Completed:</strong> ${monthsCompleted} months</p>
-        <p><strong>Days Completed:</strong> ${daysCompleted} days</p>
-        <p><strong>Estimated Date of Delivery:</strong> <strong>${edd.toISOString().split('T')[0]} (AD)</strong> / <strong>${new NepaliDate(edd).format('YYYY-MM-DD')} (BS)</strong></p>
-        <table>
+        <p><strong>Completed:</strong> ${weeksCompleted} weeks and ${daysCompleted} days</p>
+        <p><strong>Estimated Date of Delivery:</strong> ${edd.toISOString().split('T')[0]} / ${new NepaliDate(edd).format('YYYY-MM-DD')}</p>
+        <table style="font-size: smaller;">
           <thead>
             <tr>
-              <th>Visit</th>
+              <th>#</th>
               <th>Weeks</th>
-              <th>Date (AD)</th>
+              <th>Date</th>
               <th>Date (BS)</th>
             </tr>
           </thead>
@@ -162,55 +138,22 @@
           </tbody>
         </table>
       `;
-
-      document.getElementById('gestational-info').innerHTML = `
-        <h4>Original Gestational Age:</h4>
-        <p>${monthsCompleted} months, ${Math.floor(weeksCompleted % 4.33)} weeks, ${daysCompleted} days</p>
-        <h4>Original Remaining Time:</h4>
-        <p>${remainingMonths} months, ${remainingWeeks % 4} weeks, ${remainingDays % 7} days</p>
-      `;
     }
 
-    // Function to set the custom date to today's date
-    function setToToday() {
-      todayDate = new Date();
-      document.getElementById('custom-date').value = todayDate.toISOString().split('T')[0];
-      calculateCustomGestationalAge();
-    }
-
-    // Function to calculate Custom Gestational Age and Remaining Time
     function calculateCustomGestationalAge() {
       const customDateInput = document.getElementById('custom-date').value;
-      if (customDateInput) {
-        todayDate = new Date(customDateInput);
-      }
-
-      const adDateInput = document.getElementById('lmp-date-ad').value;
-      if (!adDateInput) {
-        alert('Please enter a valid LMP date in AD format.');
+      if (!customDateInput) {
         return;
       }
-      const lmpDate = new Date(adDateInput);
-
-      const weeksCompleted = Math.floor((todayDate - lmpDate) / (7 * 24 * 60 * 60 * 1000));
-      const monthsCompleted = Math.floor(weeksCompleted / 4.33);
-      const daysCompleted = Math.floor((todayDate - lmpDate) / (24 * 60 * 60 * 1000));
-
-      const edd = new Date(lmpDate);
-      edd.setDate(lmpDate.getDate() + 280);
-
-      const remainingTime = new Date(edd - todayDate);
-      const remainingDays = Math.floor(remainingTime / (24 * 60 * 60 * 1000));
-      const remainingWeeks = Math.floor(remainingDays / 7);
-      const remainingMonths = Math.floor(remainingWeeks / 4.33);
+      const lmpDate = new Date(document.getElementById('lmp-date-ad').value);
+      const customDate = new Date(customDateInput);
+      const weeksCompleted = Math.floor((customDate - lmpDate) / (7 * 24 * 60 * 60 * 1000));
+      const daysCompleted = Math.floor((customDate - lmpDate) / (24 * 60 * 60 * 1000)) % 7;
+      const remainingDays = 280 - Math.floor((customDate - lmpDate) / (24 * 60 * 60 * 1000));
 
       document.getElementById('custom-gestational-info').innerHTML = `
-        <h4>Custom Gestational Age:</h4>
-        <p>${monthsCompleted} months, ${Math.floor(weeksCompleted % 4.33)} weeks, ${daysCompleted} days</p>
-      `;
-      document.getElementById('custom-remaining-time').innerHTML = `
-        <h4>Custom Remaining Time:</h4>
-        <p>${remainingMonths} months, ${remainingWeeks % 4} weeks, ${remainingDays % 7} days</p>
+        <p><strong>Gestational Age on Selected Date:</strong> ${weeksCompleted} weeks and ${daysCompleted} days</p>
+        <p><strong>Remaining Time until EDD:</strong> ${remainingDays} days</p>
       `;
     }
   </script>
