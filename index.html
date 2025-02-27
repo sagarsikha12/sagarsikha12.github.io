@@ -122,7 +122,7 @@
       });
       
       document.getElementById('visit-schedule').innerHTML = `
-        <p><strong>Completed:</strong> ${weeksCompleted} weeks and ${daysCompleted} days</p>
+        <p><strong>Completed Weeks:</strong> ${weeksCompleted} weeks and ${daysCompleted} days</p>
         <p><strong>Estimated Date of Delivery:</strong> ${edd.toISOString().split('T')[0]} / ${new NepaliDate(edd).format('YYYY-MM-DD')}</p>
         <table style="font-size: smaller;">
           <thead>
