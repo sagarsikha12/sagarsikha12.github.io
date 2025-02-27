@@ -101,8 +101,12 @@
       }
       const lmpDate = new Date(adDateInput);
       const todayDate = new Date();
-      const weeksCompleted = Math.floor((todayDate - lmpDate) / (7 * 24 * 60 * 60 * 1000));
-      const daysCompleted = Math.floor((todayDate - lmpDate) / (24 * 60 * 60 * 1000)) % 7;
+      const totalDaysCompleted = Math.floor((todayDate - lmpDate) / (24 * 60 * 60 * 1000));
+      const weeksCompleted = Math.floor(totalDaysCompleted / 7);
+      const daysCompleted = totalDaysCompleted % 7;
+      const monthsCompleted = Math.floor(totalDaysCompleted / 30);
+      const extraDaysCompleted = totalDaysCompleted % 30;
+
       const edd = new Date(lmpDate);
       edd.setDate(lmpDate.getDate() + 280);
       
@@ -122,15 +126,16 @@
       });
       
       document.getElementById('visit-schedule').innerHTML = `
+        <p><strong>Completed Months:</strong> ${monthsCompleted} months and ${extraDaysCompleted} days</p>
         <p><strong>Completed Weeks:</strong> ${weeksCompleted} weeks and ${daysCompleted} days</p>
         <p><strong>Estimated Date of Delivery:</strong> ${edd.toISOString().split('T')[0]} / ${new NepaliDate(edd).format('YYYY-MM-DD')}</p>
         <table style="font-size: smaller;">
           <thead>
             <tr>
-              <th>#</th>
+              <th>Visit</th>
               <th>Weeks</th>
-              <th>Date</th>
-              <th>Date (BS)</th>
+              <th>AD Date</th>
+              <th>BS Date</th>
             </tr>
           </thead>
           <tbody>
