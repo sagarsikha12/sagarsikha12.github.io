@@ -52,6 +52,9 @@
   <script src="https://cdn.jsdelivr.net/npm/nepali-date-converter/dist/nepali-date-converter.umd.js"></script>
   <script>
      // Function to set the custom date to today's date
+    // At the top of your <script> block or before you use NepaliDate
+const NepaliDate = window.NepaliDateConverter.NepaliDate;
+
      function setToToday() {
       todayDate = new Date();
       document.getElementById('custom-date').value = todayDate.toISOString().split('T')[0];
