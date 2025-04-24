@@ -50,19 +50,18 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/nepali-date-converter/dist/nepali-date-converter.umd.js"></script>
-  <script>
-     // Function to set the custom date to today's date
-    // At the top of your <script> block or before you use NepaliDate
-const NepaliDate = window.NepaliDateConverter.NepaliDate;
+ <script src="https://cdn.jsdelivr.net/npm/nepali-date-converter/dist/nepali-date-converter.umd.js"></script>
+<script>
+  window.onload = function () {
+    const NepaliDate = window.NepaliDateConverter.NepaliDate;
 
-     function setToToday() {
-      todayDate = new Date();
+    // Your full code here — all functions defined *inside* this onload
+    function setToToday() {
+      const todayDate = new Date();
       document.getElementById('custom-date').value = todayDate.toISOString().split('T')[0];
       calculateCustomGestationalAge();
     }
-   
 
-    // Function to switch between tabs
     function openTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
       document.querySelectorAll('.tab-button').forEach(button => button.classList.remove('active'));
@@ -70,8 +69,7 @@ const NepaliDate = window.NepaliDateConverter.NepaliDate;
       document.querySelector(`button[onclick="openTab('${tabId}')"]`).classList.add('active');
     }
 
-     // Function to convert AD to BS
-     function convertToBS() {
+    function convertToBS() {
       const adDateInput = document.getElementById('lmp-date-ad').value;
       if (!adDateInput) {
         alert('Please enter a valid AD date.');
@@ -81,8 +79,7 @@ const NepaliDate = window.NepaliDateConverter.NepaliDate;
       const bsDate = new NepaliDate(adDate).format('YYYY-MM-DD');
       document.getElementById('lmp-bs-result').innerText = `Nepali LMP (BS): ${bsDate}`;
     }
-    
-    // Function to convert BS to AD
+
     function convertToAD() {
       const bsYear = document.getElementById('bs-year').value;
       const bsMonth = document.getElementById('bs-month').value;
@@ -112,7 +109,7 @@ const NepaliDate = window.NepaliDateConverter.NepaliDate;
 
       const edd = new Date(lmpDate);
       edd.setDate(lmpDate.getDate() + 280);
-      
+
       const visits = [12, 16, 20, 24, 28, 32, 34, 36, 38, 40];
       let visitRows = '';
       visits.forEach((week, index) => {
@@ -127,7 +124,7 @@ const NepaliDate = window.NepaliDateConverter.NepaliDate;
           </tr>
         `;
       });
-      
+
       document.getElementById('visit-schedule').innerHTML = `
         <p><strong>Completed Months:</strong> ${monthsCompleted} months and ${extraDaysCompleted} days</p>
         <p><strong>Completed Weeks:</strong> ${weeksCompleted} weeks and ${daysCompleted} days</p>
@@ -164,7 +161,17 @@ const NepaliDate = window.NepaliDateConverter.NepaliDate;
         <p><strong>Remaining:</strong> ${remainingDays} days</p>
       `;
     }
-  </script>
+
+    // Attach to global so inline HTML `onclick` works
+    window.setToToday = setToToday;
+    window.openTab = openTab;
+    window.convertToBS = convertToBS;
+    window.convertToAD = convertToAD;
+    window.calculateANC = calculateANC;
+    window.calculateCustomGestationalAge = calculateCustomGestationalAge;
+  }
+</script>
+
 </body>
 
 </html>
