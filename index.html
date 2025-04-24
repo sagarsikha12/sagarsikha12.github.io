@@ -50,12 +50,9 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/nepali-date-converter/dist/nepali-date-converter.umd.js"></script>
- <script src="https://cdn.jsdelivr.net/npm/nepali-date-converter/dist/nepali-date-converter.umd.js"></script>
+ 
 <script>
   window.onload = function () {
-    const NepaliDate = window.NepaliDateConverter.NepaliDate;
-
-    // Your full code here — all functions defined *inside* this onload
     function setToToday() {
       const todayDate = new Date();
       document.getElementById('custom-date').value = todayDate.toISOString().split('T')[0];
@@ -76,8 +73,12 @@
         return;
       }
       const adDate = new Date(adDateInput);
-      const bsDate = new NepaliDate(adDate).format('YYYY-MM-DD');
-      document.getElementById('lmp-bs-result').innerText = `Nepali LMP (BS): ${bsDate}`;
+      const bsDate = NepaliDateConverter.adToBs({
+        year: adDate.getFullYear(),
+        month: adDate.getMonth() + 1,
+        day: adDate.getDate(),
+      });
+      document.getElementById('lmp-bs-result').innerText = `Nepali LMP (BS): ${bsDate.year}-${String(bsDate.month).padStart(2, '0')}-${String(bsDate.day).padStart(2, '0')}`;
     }
 
     function convertToAD() {
@@ -88,9 +89,12 @@
         alert('Please enter a valid BS date.');
         return;
       }
-      const bsDate = new NepaliDate(Number(bsYear), Number(bsMonth) - 1, Number(bsDay));
-      const adDate = bsDate.toJsDate().toISOString().split('T')[0];
-      document.getElementById('lmp-ad-result').innerText = `Gregorian LMP (AD): ${adDate}`;
+      const adDate = NepaliDateConverter.bsToAd({
+        year: Number(bsYear),
+        month: Number(bsMonth),
+        day: Number(bsDay),
+      });
+      document.getElementById('lmp-ad-result').innerText = `Gregorian LMP (AD): ${adDate.year}-${String(adDate.month).padStart(2, '0')}-${String(adDate.day).padStart(2, '0')}`;
     }
 
     function calculateANC() {
@@ -115,12 +119,17 @@
       visits.forEach((week, index) => {
         const visitDate = new Date(lmpDate);
         visitDate.setDate(lmpDate.getDate() + week * 7);
+        const bsVisitDate = NepaliDateConverter.adToBs({
+          year: visitDate.getFullYear(),
+          month: visitDate.getMonth() + 1,
+          day: visitDate.getDate(),
+        });
         visitRows += `
           <tr>
             <td>${index + 1}</td>
             <td>${week}</td>
             <td>${visitDate.toISOString().split('T')[0]}</td>
-            <td>${new NepaliDate(visitDate).format('YYYY-MM-DD')}</td>
+            <td>${bsVisitDate.year}-${String(bsVisitDate.month).padStart(2, '0')}-${String(bsVisitDate.day).padStart(2, '0')}</td>
           </tr>
         `;
       });
@@ -128,7 +137,7 @@
       document.getElementById('visit-schedule').innerHTML = `
         <p><strong>Completed Months:</strong> ${monthsCompleted} months and ${extraDaysCompleted} days</p>
         <p><strong>Completed Weeks:</strong> ${weeksCompleted} weeks and ${daysCompleted} days</p>
-        <p><strong>Estimated Date of Delivery:</strong> ${edd.toISOString().split('T')[0]} / ${new NepaliDate(edd).format('YYYY-MM-DD')}</p>
+        <p><strong>Estimated Date of Delivery:</strong> ${edd.toISOString().split('T')[0]}</p>
         <table style="font-size: smaller;">
           <thead>
             <tr>
@@ -162,7 +171,6 @@
       `;
     }
 
-    // Attach to global so inline HTML `onclick` works
     window.setToToday = setToToday;
     window.openTab = openTab;
     window.convertToBS = convertToBS;
