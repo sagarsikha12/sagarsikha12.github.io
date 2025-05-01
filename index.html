@@ -1,23 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ANC Visit Calculator</title>
+
+  <!-- Google font (optional) -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <!-- Your own stylesheet (keep/remove as you wish) -->
   <link rel="stylesheet" href="style.css">
+
+  <!-- ✅ correct path for NepaliFunctions -->
+  <script src="https://cdn.jsdelivr.net/npm/@sajanm/nepali-functions@1.4.8/sajan.nepaliFunctions.min.js"></script>
+  
+
+  <style>
+    /* Minimal fallback styles in case style.css isn’t present */
+    body{font-family:Poppins,Arial,Helvetica,sans-serif;margin:0;padding:2rem;background:#fafafa}
+    .container{max-width:600px;margin:auto;background:#fff;padding:2rem;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,0.1)}
+    h1{text-align:center;margin-top:0}
+    .tabs{display:flex;gap:8px;margin-bottom:1rem}
+    .tab-button{flex:1;padding:.6rem;border:none;border-radius:4px;background:#eee;cursor:pointer}
+    .tab-button.active{background:#0077cc;color:#fff}
+    .tab-content{display:none}
+    .tab-content.active{display:block}
+    input[type="date"],input[type="number"]{padding:.5rem;margin:.3rem 0;width:100%;box-sizing:border-box}
+    button{padding:.6rem 1rem;border:none;border-radius:4px;background:#0077cc;color:#fff;cursor:pointer}
+    button:hover{background:#005fa3}
+    table{width:100%;border-collapse:collapse;margin-top:1rem}
+    th,td{border:1px solid #ddd;padding:.4rem;text-align:center}
+    th{background:#f0f0f0}
+    footer{margin-top:2rem;text-align:center;font-size:.9rem;color:#666}
+  </style>
 </head>
 
 <body>
   <div class="container">
     <h1>ANC Nepal</h1>
 
+    <!-- Tab selector -->
     <div class="tabs">
-      <button class="tab-button active" onclick="openTab('tab-ad')">AD Input</button>
-      <button class="tab-button" onclick="openTab('tab-bs')">BS Input</button>
+      <button class="tab-button active" data-tab="tab-ad" onclick="openTab('tab-ad')">AD Input</button>
+      <button class="tab-button"           data-tab="tab-bs" onclick="openTab('tab-bs')">BS Input</button>
     </div>
 
+    <!-- AD input -->
     <div id="tab-ad" class="tab-content active">
       <h3>Enter LMP in AD</h3>
       <input type="date" id="lmp-date-ad">
@@ -25,161 +53,127 @@
       <div id="lmp-bs-result"></div>
     </div>
 
+    <!-- BS input -->
     <div id="tab-bs" class="tab-content">
       <h3>Enter LMP in BS</h3>
-      <input type="number" id="bs-year" placeholder="YYYY">
+      <input type="number" id="bs-year"  placeholder="YYYY">
       <input type="number" id="bs-month" placeholder="MM">
-      <input type="number" id="bs-day" placeholder="DD">
+      <input type="number" id="bs-day"   placeholder="DD">
       <button onclick="convertToAD()">Convert to AD</button>
       <div id="lmp-ad-result"></div>
     </div>
 
     <hr>
+
+    <!-- ANC schedule & custom GA -->
     <button onclick="calculateANC()">Calculate ANC Visits</button>
     <div id="visit-schedule"></div>
-    <div id="remaining-time"></div>
 
-    
     <input type="date" id="custom-date" onchange="calculateCustomGestationalAge()">
     <button onclick="setToToday()">Today</button>
     <div id="custom-gestational-info"></div>
   </div>
 
   <footer>
-    <p>Created ❤️ by <strong>Bnd Yadav</strong> Health Assistant</p>
+    Created ❤️ by <strong>Bnd Yadav</strong> Health Assistant
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/nepali-date-converter/dist/nepali-date-converter.umd.js"></script>
- 
-<script>
-  window.onload = function () {
-    function setToToday() {
-      const todayDate = new Date();
-      document.getElementById('custom-date').value = todayDate.toISOString().split('T')[0];
+  <!-- Main logic -->
+  <script>
+  /* ------------------------------------------------------------------
+     ANC calculator + AD↔BS converter using NepaliFunctions (6 kB)   */
+  (() => {
+    /* helpers */
+    const $ = s => document.querySelector(s);
+    const pad = n => String(n).padStart(2,'0');
+    const MS_DAY = 864e5;
+
+    /* tab navigation */
+    function openTab(id){
+      document.querySelectorAll('.tab-content').forEach(el =>
+        el.classList.toggle('active', el.id===id));
+      document.querySelectorAll('.tab-button').forEach(btn =>
+        btn.classList.toggle('active', btn.dataset.tab===id));
+    }
+
+    /* AD ➜ BS */
+    function convertToBS(){
+      const val = $('#lmp-date-ad').value;
+      if(!val) return alert('Please pick an AD date first.');
+      const [y,m,d] = val.split('-').map(Number);
+      const {year,month,day} = NepaliFunctions.AD2BS({year:y,month:m,day:d});
+      $('#lmp-bs-result').textContent =
+        `Nepali LMP (BS): ${year}-${pad(month)}-${pad(day)}`;
+    }
+
+    /* BS ➜ AD */
+    function convertToAD(){
+      const y = +$('#bs-year').value,
+            m = +$('#bs-month').value,
+            d = +$('#bs-day').value;
+      if(!(y&&m&&d)) return alert('Enter full BS date.');
+      const {year,month,day} = NepaliFunctions.BS2AD({year:y,month:m,day:d});
+      $('#lmp-ad-result').textContent =
+        `Gregorian LMP (AD): ${year}-${pad(month)}-${pad(day)}`;
+    }
+
+    /* ANC visit schedule */
+    function calculateANC(){
+      const val = $('#lmp-date-ad').value;
+      if(!val) return alert('Enter LMP in AD first.');
+      const lmp = new Date(val), today = new Date();
+      const days = Math.floor((today-lmp)/MS_DAY);
+      const weeks = Math.floor(days/7);
+      const months = Math.floor(days/30);
+      const extraDays = days % 30;
+      const edd = new Date(lmp.getTime() + 280*MS_DAY);
+      const visits=[12,16,20,24,28,32,34,36,38,40];
+
+      let rows='';
+      visits.forEach((wk,i)=>{
+        const v = new Date(lmp.getTime() + wk*7*MS_DAY);
+        const {year,month,day} = NepaliFunctions.AD2BS(
+          {year:v.getFullYear(),month:v.getMonth()+1,day:v.getDate()});
+        rows += `<tr><td>${i+1}</td><td>${wk}</td>
+                 <td>${v.toISOString().split('T')[0]}</td>
+                 <td>${year}-${pad(month)}-${pad(day)}</td></tr>`;
+      });
+
+      $('#visit-schedule').innerHTML = `
+        <p><strong>Completed Months:</strong> ${months} m ${extraDays} d</p>
+        <p><strong>Completed Weeks:</strong> ${weeks} w ${days%7} d</p>
+        <p><strong>EDD:</strong> ${edd.toISOString().split('T')[0]}</p>
+        <table><thead><tr>
+          <th>Visit</th><th>Weeks</th><th>AD Date</th><th>BS Date</th>
+        </tr></thead><tbody>${rows}</tbody></table>`;
+    }
+
+    /* gestational age for custom date */
+    function calculateCustomGestationalAge(){
+      const custom = $('#custom-date').value,
+            lmpVal = $('#lmp-date-ad').value;
+      if(!custom || !lmpVal) return;
+      const L = new Date(lmpVal), C = new Date(custom);
+      const days = Math.floor((C-L)/MS_DAY);
+      const gWeeks = Math.floor(days/7), gDays = days%7;
+      $('#custom-gestational-info').innerHTML =
+        `<p><strong>Gestational Age:</strong> ${gWeeks} w ${gDays} d</p>
+         <p><strong>Remaining:</strong> ${280-days} days</p>`;
+    }
+
+    /* today button */
+    function setToToday(){
+      $('#custom-date').value = new Date().toISOString().split('T')[0];
       calculateCustomGestationalAge();
     }
 
-    function openTab(tabId) {
-      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-      document.querySelectorAll('.tab-button').forEach(button => button.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
-      document.querySelector(`button[onclick="openTab('${tabId}')"]`).classList.add('active');
-    }
-
-    function convertToBS() {
-      const adDateInput = document.getElementById('lmp-date-ad').value;
-      if (!adDateInput) {
-        alert('Please enter a valid AD date.');
-        return;
-      }
-      const adDate = new Date(adDateInput);
-      const bsDate = NepaliDateConverter.adToBs({
-        year: adDate.getFullYear(),
-        month: adDate.getMonth() + 1,
-        day: adDate.getDate(),
-      });
-      document.getElementById('lmp-bs-result').innerText = `Nepali LMP (BS): ${bsDate.year}-${String(bsDate.month).padStart(2, '0')}-${String(bsDate.day).padStart(2, '0')}`;
-    }
-
-    function convertToAD() {
-      const bsYear = document.getElementById('bs-year').value;
-      const bsMonth = document.getElementById('bs-month').value;
-      const bsDay = document.getElementById('bs-day').value;
-      if (!bsYear || !bsMonth || !bsDay) {
-        alert('Please enter a valid BS date.');
-        return;
-      }
-      const adDate = NepaliDateConverter.bsToAd({
-        year: Number(bsYear),
-        month: Number(bsMonth),
-        day: Number(bsDay),
-      });
-      document.getElementById('lmp-ad-result').innerText = `Gregorian LMP (AD): ${adDate.year}-${String(adDate.month).padStart(2, '0')}-${String(adDate.day).padStart(2, '0')}`;
-    }
-
-    function calculateANC() {
-      const adDateInput = document.getElementById('lmp-date-ad').value;
-      if (!adDateInput) {
-        alert('Please enter a valid LMP date in AD format.');
-        return;
-      }
-      const lmpDate = new Date(adDateInput);
-      const todayDate = new Date();
-      const totalDaysCompleted = Math.floor((todayDate - lmpDate) / (24 * 60 * 60 * 1000));
-      const weeksCompleted = Math.floor(totalDaysCompleted / 7);
-      const daysCompleted = totalDaysCompleted % 7;
-      const monthsCompleted = Math.floor(totalDaysCompleted / 30);
-      const extraDaysCompleted = totalDaysCompleted % 30;
-
-      const edd = new Date(lmpDate);
-      edd.setDate(lmpDate.getDate() + 280);
-
-      const visits = [12, 16, 20, 24, 28, 32, 34, 36, 38, 40];
-      let visitRows = '';
-      visits.forEach((week, index) => {
-        const visitDate = new Date(lmpDate);
-        visitDate.setDate(lmpDate.getDate() + week * 7);
-        const bsVisitDate = NepaliDateConverter.adToBs({
-          year: visitDate.getFullYear(),
-          month: visitDate.getMonth() + 1,
-          day: visitDate.getDate(),
-        });
-        visitRows += `
-          <tr>
-            <td>${index + 1}</td>
-            <td>${week}</td>
-            <td>${visitDate.toISOString().split('T')[0]}</td>
-            <td>${bsVisitDate.year}-${String(bsVisitDate.month).padStart(2, '0')}-${String(bsVisitDate.day).padStart(2, '0')}</td>
-          </tr>
-        `;
-      });
-
-      document.getElementById('visit-schedule').innerHTML = `
-        <p><strong>Completed Months:</strong> ${monthsCompleted} months and ${extraDaysCompleted} days</p>
-        <p><strong>Completed Weeks:</strong> ${weeksCompleted} weeks and ${daysCompleted} days</p>
-        <p><strong>Estimated Date of Delivery:</strong> ${edd.toISOString().split('T')[0]}</p>
-        <table style="font-size: smaller;">
-          <thead>
-            <tr>
-              <th>Visit</th>
-              <th>Weeks</th>
-              <th>AD Date</th>
-              <th>BS Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${visitRows}
-          </tbody>
-        </table>
-      `;
-    }
-
-    function calculateCustomGestationalAge() {
-      const customDateInput = document.getElementById('custom-date').value;
-      if (!customDateInput) {
-        return;
-      }
-      const lmpDate = new Date(document.getElementById('lmp-date-ad').value);
-      const customDate = new Date(customDateInput);
-      const weeksCompleted = Math.floor((customDate - lmpDate) / (7 * 24 * 60 * 60 * 1000));
-      const daysCompleted = Math.floor((customDate - lmpDate) / (24 * 60 * 60 * 1000)) % 7;
-      const remainingDays = 280 - Math.floor((customDate - lmpDate) / (24 * 60 * 60 * 1000));
-
-      document.getElementById('custom-gestational-info').innerHTML = `
-        <p><strong>Gestational Age:</strong> ${weeksCompleted} weeks and ${daysCompleted} days</p>
-        <p><strong>Remaining:</strong> ${remainingDays} days</p>
-      `;
-    }
-
-    window.setToToday = setToToday;
-    window.openTab = openTab;
-    window.convertToBS = convertToBS;
-    window.convertToAD = convertToAD;
-    window.calculateANC = calculateANC;
-    window.calculateCustomGestationalAge = calculateCustomGestationalAge;
-  }
-</script>
-
+    /* expose handlers */
+    Object.assign(window,{
+      openTab, convertToBS, convertToAD,
+      calculateANC, calculateCustomGestationalAge,
+      setToToday
+    });
+  })();
+  </script>
 </body>
-
 </html>
